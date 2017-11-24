@@ -7,7 +7,10 @@ const path = require('path');
 const glob = require("glob");
 module.exports = {
   entry: {
-    app : glob.sync("./src/*.tsx"),
+
+    /* app: ["src/js/app.tsx", "src/js/components/Excel.tsx", "src/js/components/FormInput.tsx",
+    "src/js/components/Rating.tsx", "src/js/components/Suggest.tsx", "src/js/classification.tsx", "src/js/schema.tsx"], */
+    app : glob.sync("./src/js/*.tsx", "./src/js/components/*.tsx"),
     vendors: [
       'react',
       'react-dom',

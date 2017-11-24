@@ -8,6 +8,22 @@ import Button from "./Button";
 import { Provider, connect } from "react-redux";
 import * as styles from "../../css/app.sass"
 
+import FormInput from "./FormInput"
+import Excel from "./Excel"
+
+const test: Object[] = [
+  {
+    primary_key: 6678,
+    id: "rating",
+    type: "rating"
+  },
+  {
+    primary_key: 6679,
+    id: "rating",
+    type: "rating"
+  }
+
+] // 通用特性
 
 type State = {
   addnew: boolean,
@@ -15,8 +31,6 @@ type State = {
 }
 
 class Whinepad extends React.Component<any, any> {
-
-  state: State;
 
   constructor(prop, context) {
       super(prop, context)
@@ -35,6 +49,11 @@ class Whinepad extends React.Component<any, any> {
     } */
   }
 
+  inputChange(e) {
+    this.props.updateText(e.target.value)
+  }
+
+
   render() {
     return (
       <div className={styles.whinepad}>
@@ -44,7 +63,7 @@ class Whinepad extends React.Component<any, any> {
             </Button>
           </div>
           <div className={styles.WhinepadToolbarSearch}>
-            <input
+            <input onInput={ e => this.inputChange(e) }
               placeholder={
                 this.props.count == 1
                   ?
@@ -53,7 +72,17 @@ class Whinepad extends React.Component<any, any> {
                   `Search ${this.props.count} records...`
               }
             />
+            <p>{this.props.text}</p>
           </div>
+        </div>
+        <div className={styles.WhinepadDatagrid}>
+          <Excel />
+        </div>
+        <div>
+          <FormInput {...test[0]} defaultValue={3} />
+        </div>
+        <div>
+          <FormInput {...test[1]} defaultValue={5} />
         </div>
       </div>
     );
@@ -62,8 +91,9 @@ class Whinepad extends React.Component<any, any> {
 }
 
 export default connect(
-    (state) => ({ count: state.count }), 
+    (state) => ({ count: state.count , text: state.text }), 
     (dispatch) => ({
-        updateCount: () => dispatch({ type:'Add_Item'})
+        updateCount: () => dispatch({ type:'Add_Item'}),
+        updateText: (text : string) => dispatch({ type:'Update_Item', text})
     })
 )(Whinepad);
