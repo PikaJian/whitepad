@@ -29,6 +29,7 @@ interface State {
 class Excel extends React.Component<any, any> {
 
   private schema: SchemaMap[];
+  private input: any;
   public state: State;
   constructor(props?, context?) {
     super(props, context);
@@ -40,7 +41,6 @@ class Excel extends React.Component<any, any> {
   }
 
   _sort(key: string) {
-    console.log("sorting")
     const descending = this.props.sortby === key && !this.props.descending;
     this.props.updateSort(key, descending);
     //CRUDActions.sort(key, descending);
@@ -56,17 +56,20 @@ class Excel extends React.Component<any, any> {
     });
   }
 
-  _save(e) {
-    /* e.preventDefault();
+  _save(e: React.FormEvent<HTMLFormElement>, primary_key: number) {
+    e.preventDefault();
     invariant(this.state.edit, 'Messed up edit state');
-    CRUDActions.updateField(
+    let value = this.input.value ? this.input.value:this.input.getValue()
+    console.log(value)
+    this.props.updateData(primary_key, this.state.edit.key, value)
+    /* CRUDActions.updateField(
       this.state.edit.row,
       this.state.edit.key,
       this.refs.input.getValue()
-    );
+    ); */
     this.setState({
       edit: null
-    }); */
+    });
   }
 
   _actionClick(rowidx: number, action: string) {
@@ -124,18 +127,16 @@ class Excel extends React.Component<any, any> {
                     Object.keys(row).map((cell, idx) => {
                       const schema = this.schema[idx];
                       if (!schema || !schema.show) {
-                        console.log(schema)
-                        console.log(cell)
                         return null;
                       }
                       const isRating = schema.type === 'rating';
                       const edit = this.state.edit;
                       let content = row[cell];
-                      //console.log(content)
                       if (!isRating && edit && edit.row === rowidx && edit.key === schema.id) {
+                        console.log(content)
                         content = (
-                          <form onSubmit={e => this._save(e)}>
-                            <FormInput ref="input" {...schema} defaultValue={content} />
+                          <form onSubmit={e => this._save(e, row.primary_key)}>
+                            <FormInput {...schema} refName={ref => this.input = ref} primary_key={row.primary_key} defaultValue={content} />
                           </form>
                         );
                       } else if (isRating) {
@@ -265,5 +266,6 @@ export default connect(
   ),
   (dispatch) => ({
     updateSort: (key, descending) => dispatch({ type: 'UPDATE_SORT', sortby: key, descending}),
+    updateData: (key, id, value) => dispatch({ type: 'UPDATE_DATA', key, id, value}),
   })
 )(Excel);

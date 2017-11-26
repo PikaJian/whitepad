@@ -59,7 +59,7 @@ class FormInput extends React.Component<any, any> {
   render() {
     var common: CommonProperty = { // 通用特性
       id: this.props.id,
-      ref: "input", // 這對擷取輸入欄位之值很有用
+      ref: this.props.refName, // 這對擷取輸入欄位之值很有用
       defaultValue: this.props.defaultValue,
     };
     const value = parseInt(this.props.data[this.props.id], 10)
@@ -69,7 +69,7 @@ class FormInput extends React.Component<any, any> {
           <input
             {...common}
             type="number"
-            defaultValue={this.props.value || new Date().getFullYear()}
+            defaultValue={this.state.value || new Date().getFullYear()}
           />
         );
 
@@ -97,5 +97,7 @@ export default connect(
       dispatch({ type: 'UPDATE_ITEM_VALUE', key, id, value });
     },
   }),
+  null,
+
 
 )(FormInput);

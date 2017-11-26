@@ -3,3 +3,4 @@ dist
 npm-debug.log
 *.css.d.ts
 *.scss.d.ts
+.idea

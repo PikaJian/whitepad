@@ -43,13 +43,3 @@ class Suggest extends React.Component<any, any> {
 }
 
 export default Suggest;
-/* export default connect(
-
-  (state, props) => ({data: state.wine_data}),
-  (dispatch) => ({
-    updateRating: (id, rating) => {
-      dispatch({ type: 'UPDATE_RATING', id, rating });
-    },
-  })
-
-)(Suggest); */

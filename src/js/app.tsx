@@ -65,12 +65,16 @@ let store = createStore(
     switch (action.type) {
       case "UPDATE_SORT":
         return {...state, sortby: action.sortby, descending: action.descending}
+      case "UPDATE_DATA":
+        var new_data = state.wine_data.filter(x => x.primary_key === action.key)[0]
+        new_data[action.id] = action.value
+        return { ...state}
       case "Update_Item":
         return { ...state, text: action.text };
       case 'UPDATE_ITEM_VALUE':
         //var data = { ...state.wine_data.filter(x => x.key === action.key)[0], rating: action.rating }
         var data = { ...state.wine_data.filter(x => x.primary_key === action.key)[0], rating: action.rating }
-        return {...state, wine_data: [...state.wine_data.filter(x => x.primary_key !== action.key), data]}
+        return { ...state, wine_data: [...state.wine_data.filter(x => x.primary_key !== action.key), data] }
       default:
         return default_state;
     }
